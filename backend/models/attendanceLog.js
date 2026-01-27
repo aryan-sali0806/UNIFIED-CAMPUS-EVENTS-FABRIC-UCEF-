@@ -1,5 +1,30 @@
 import mongoose from "mongoose";
 
+const roundProgressSchema = new mongoose.Schema(
+  {
+    roundNumber: {
+      type: Number,
+      required: true,
+    },
+
+    status: {
+      type: String,
+      enum: ["QUALIFIED", "DISQUALIFIED", "NOT_ATTEMPTED"],
+      default: "NOT_ATTEMPTED",
+    },
+
+    attended: {
+      type: Boolean,
+      default: false,
+    },
+
+    score: {
+      type: Number, // optional (coding rounds, auctions, etc.)
+    },
+  },
+  { _id: false }
+);
+
 const attendanceLogSchema = new mongoose.Schema(
   {
     event: {
@@ -32,15 +57,20 @@ const attendanceLogSchema = new mongoose.Schema(
       default: "NOT_MARKED",
     },
 
-    attendanceMethod: {
-      type: String,
-      enum: ["QR", "MANUAL", "OTP", "AUTO"],
-    },
-
     attendancePercentage: {
       type: Number,
       min: 0,
       max: 100,
+      default: 0,
+    },
+
+    roundsProgress: {
+      type: [roundProgressSchema],
+      default: [],
+    },
+
+    highestRoundQualified: {
+      type: Number,
       default: 0,
     },
 
@@ -63,8 +93,10 @@ const attendanceLogSchema = new mongoose.Schema(
   }
 );
 
+// One user can have only one participation record per event
 attendanceLogSchema.index({ event: 1, user: 1 }, { unique: true });
 
 const AttendanceLog = mongoose.model("AttendanceLog", attendanceLogSchema);
 
 export default AttendanceLog;
+

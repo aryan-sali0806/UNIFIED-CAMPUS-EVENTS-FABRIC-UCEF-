@@ -1,5 +1,36 @@
 import mongoose from "mongoose";
 
+const roundSchema = new mongoose.Schema(
+  {
+    roundNumber: {
+      type: Number,
+      required: true,
+    },
+
+    name: {
+      type: String,
+      required: true,
+    },
+
+    mode: {
+      type: String,
+      enum: ["ONLINE", "OFFLINE"],
+      required: true,
+    },
+
+    description: {
+      type: String,
+    },
+
+    qualificationRule: {
+      type: String,
+      required: true,
+      // eg: "Top 30%", "Top 10 teams", "Score >= 60"
+    },
+  },
+  { _id: false }
+);
+
 const eventSchema = new mongoose.Schema(
   {
     title: {
@@ -15,8 +46,23 @@ const eventSchema = new mongoose.Schema(
 
     eventType: {
       type: String,
-      enum: ["workshop", "hackathon", "seminar", "cultural", "club"],
+      enum: ["workshop", "hackathon", "seminar", "cultural", "club", "competition"],
       required: true,
+    },
+
+    mode: {
+      type: String,
+      enum: ["ONLINE", "OFFLINE", "HYBRID"],
+      required: true,
+    },
+
+    isTeamEvent: {
+      type: Boolean,
+      default: false,
+    },
+
+    maxTeamSize: {
+      type: Number,
     },
 
     organizer: {
@@ -41,21 +87,31 @@ const eventSchema = new mongoose.Schema(
       required: true,
     },
 
-    attendanceMethod: {
-      type: String,
-      enum: ["QR", "MANUAL", "OTP", "AUTO"],
-      required: true,
+    rounds: {
+      type: [roundSchema],
+      default: [],
     },
 
-    certificateRule: {
-      minAttendancePercentage: {
-        type: Number,
-        default: 75,
-      },
-      mandatory: {
-        type: Boolean,
-        default: true,
-      },
+    attendanceMethod: {
+      type: String,
+      enum: ["QR", "MANUAL", "OTP", "AUTO", "NONE"],
+      default: "NONE",
+    },
+
+    certificatePolicy: {
+      type: String,
+      enum: ["ALL_PARTICIPANTS", "FINALISTS", "WINNERS_ONLY", "NONE"],
+      default: "ALL_PARTICIPANTS",
+    },
+
+    prizePool: {
+      type: Number,
+      default: 0,
+    },
+
+    registrationFee: {
+      type: Number,
+      default: 0,
     },
 
     isPublished: {
@@ -71,3 +127,4 @@ const eventSchema = new mongoose.Schema(
 const Event = mongoose.model("Event", eventSchema);
 
 export default Event;
+
