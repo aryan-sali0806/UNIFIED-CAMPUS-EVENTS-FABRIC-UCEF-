@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import Hackathons from "./pages/Hackathons";
 import Quizzes from "./pages/Quizzes";
@@ -24,8 +25,8 @@ function App() {
         <Route path="/practice" element={<Practice />} />
         <Route path="/mentorship" element={<Mentorship />} />
         
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Auth />} />
+        <Route path="/signup" element={<Auth />} />
 
         
       </Routes>
