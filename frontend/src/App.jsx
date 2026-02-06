@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Auth from "./pages/Auth";
@@ -10,9 +10,22 @@ import Cultural from "./pages/Cultural";
 import Festivals from "./pages/Festivals";
 import Practice from "./pages/Practice";
 import Mentorship from "./pages/MentorShip";
+import OrganizerProtectedRoute from "./routes/OrganizerProtectedRoute";
+import OrganizerLayout from "./organizer/pages/OrganizerLayout";
+import Dashboard from "./organizer/pages/Dashboard";
+import Events from "./organizer/pages/Events";
+import Customization from "./organizer/pages/Customization";
+
 
 
 function App() {
+  
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/login");
+  };
   return (
     <BrowserRouter>
       <Routes>
@@ -27,6 +40,13 @@ function App() {
         
         <Route path="/login" element={<Auth />} />
         <Route path="/signup" element={<Auth />} />
+        <Route path="/organizer" element={<OrganizerProtectedRoute />}>
+          <Route element={<OrganizerLayout />}>
+           <Route index element={<Dashboard />} />
+           <Route path="events" element={<Events />} />
+           <Route path="customize" element={<Customization />} />
+          </Route>
+        </Route>
 
         
       </Routes>

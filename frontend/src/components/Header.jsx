@@ -1,7 +1,17 @@
 import { Search, Bell, User, LogIn, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const Header = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/login");
+  };
   return (
     <header className="flex items-center justify-between mb-10">
       {/* Search */}
@@ -37,10 +47,22 @@ const Header = () => {
 
         <Bell className="text-slate-600 cursor-pointer" />
 
-        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500
-                        text-white flex items-center justify-center shadow">
-          <User size={18} />
+        <div className="flex items-center gap-4">
+            {token && role === "organizer" && (
+              <>
+                <span className="text-sm text-slate-600">Organizer</span>
+
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 text-sm rounded-lg bg-rose-500 text-white
+                            hover:bg-rose-600 transition font-medium"
+                >
+                  Logout
+                </button>
+              </>
+            )}
         </div>
+
       </div>
     </header>
   );

@@ -27,7 +27,7 @@ export const registerController = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: role || "student",
+      role: role || "candidate",
     });
 
     const token = generateToken(user);
