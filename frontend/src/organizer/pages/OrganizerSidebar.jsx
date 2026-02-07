@@ -1,7 +1,17 @@
-import { NavLink } from "react-router-dom";
-import { LayoutDashboard, CalendarDays, Settings } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { LayoutDashboard, CalendarDays, Settings, LogOut } from "lucide-react";
 
 const OrganizerSidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    navigate("/login");
+  };
+
   const linkClass = ({ isActive }) =>
     `flex items-center gap-3 px-5 py-3 rounded-lg font-medium transition
      ${
@@ -35,9 +45,18 @@ const OrganizerSidebar = () => {
         </NavLink>
       </nav>
 
-      {/* Footer */}
-      <div className="px-4 py-4 text-xs text-slate-400 border-t">
-        © 2026 UCEF
+      {/* Footer - Logout */}
+      <div className="px-4 py-4 border-t">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-600 hover:bg-red-50 font-medium transition"
+        >
+          <LogOut size={18} />
+          Logout
+        </button>
+        <div className="text-xs text-slate-400 mt-4 px-2">
+          © 2026 UCEF
+        </div>
       </div>
     </aside>
   );

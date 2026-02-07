@@ -92,10 +92,20 @@ const eventSchema = new mongoose.Schema(
       default: [],
     },
 
+    numberOfRounds: {
+      type: Number,
+      default: 1,
+    },
+
     attendanceMethod: {
       type: String,
       enum: ["QR", "MANUAL", "OTP", "AUTO", "NONE"],
       default: "NONE",
+    },
+
+    attendanceToken: {
+      type: String,
+      default: null,
     },
 
     certificatePolicy: {

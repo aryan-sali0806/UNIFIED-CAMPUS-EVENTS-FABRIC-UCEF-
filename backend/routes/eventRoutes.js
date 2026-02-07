@@ -1,14 +1,36 @@
 import express from "express";
 import {
   createEventController,
+  getEventsController,
+  getEventController,
   publishEventController,
   completeEventController,
   archiveEventController,
+  updateEventController,
+  getPublishedEventsController,
 } from "../controllers/eventController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleGuard from "../middleware/roleGuard.js";
 
 const router = express.Router();
+
+// Get all published events (public - for candidates to browse)
+router.get("/browse", getPublishedEventsController);
+
+// Get all events for the organizer
+router.get(
+  "/",
+  authMiddleware,
+  roleGuard("organizer", "admin"),
+  getEventsController
+);
+
+// Get single event
+router.get(
+  "/:eventId",
+  authMiddleware,
+  getEventController
+);
 
 // Create event
 router.post(
@@ -38,8 +60,16 @@ router.post(
 router.post(
   "/:eventId/archive",
   authMiddleware,
-  roleGuard("admin"),
+  roleGuard("organizer", "admin"),
   archiveEventController
+);
+
+// Update event (edit)
+router.put(
+  "/:eventId",
+  authMiddleware,
+  roleGuard("organizer", "admin"),
+  updateEventController
 );
 
 export default router;

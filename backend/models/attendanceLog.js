@@ -69,6 +69,30 @@ const attendanceLogSchema = new mongoose.Schema(
       default: [],
     },
 
+    participationDetails: {
+      teamName: {
+        type: String,
+      },
+      teamMembers: [
+        {
+          memberId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+          },
+          name: String,
+          email: String,
+          rollNumber: String,
+          department: String,
+          year: String,
+        },
+      ],
+      description: String,
+      ideaTitle: String,
+      techStack: String,
+      githubLink: String,
+      submissionLink: String,
+    },
+
     highestRoundQualified: {
       type: Number,
       default: 0,

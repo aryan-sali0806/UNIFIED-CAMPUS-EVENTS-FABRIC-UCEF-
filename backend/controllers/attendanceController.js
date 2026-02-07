@@ -3,6 +3,7 @@ import {
     markAttendance,
     updateRoundResult,
     evaluateCertificateEligibility,
+    submitParticipation,
   } from "../services/attendanceService.js";
   
   export const registerController = async (req, res) => {
@@ -85,6 +86,26 @@ import {
         success: true,
         message: "Certificate evaluated",
         eligible,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  export const submitParticipationController = async (req, res) => {
+    try {
+      const { eventId, participationDetails } = req.body;
+      const userId = req.user.id;
+
+      const log = await submitParticipation(eventId, userId, participationDetails);
+
+      res.status(200).json({
+        success: true,
+        message: "Participation details submitted successfully",
+        data: log,
       });
     } catch (error) {
       res.status(400).json({

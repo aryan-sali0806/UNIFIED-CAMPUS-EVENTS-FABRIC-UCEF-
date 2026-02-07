@@ -13,6 +13,7 @@ import {
   Calendar,
   Target,
   Users,
+  Mic,
 } from "lucide-react";
 
 const categories = [
@@ -21,6 +22,12 @@ const categories = [
     path: "/hackathons",
     icon: Trophy,
     color: "from-indigo-500 to-indigo-700",
+  },
+  {
+    name: "Seminars",
+    path: "/seminars",
+    icon: Mic,
+    color: "from-purple-500 to-purple-700",
   },
   {
     name: "Quizzes",

@@ -4,25 +4,27 @@ import {
   markAttendanceController,
   updateRoundController,
   certificateEvaluationController,
+  submitParticipationController,
 } from "../controllers/attendanceController.js";
+import { verifyQRCodeController } from "../controllers/qrCodeController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleGuard from "../middleware/roleGuard.js";
 
 const router = express.Router();
 
-// Student registers for an event
+// Student/Candidate registers for an event
 router.post(
   "/register",
   authMiddleware,
-  roleGuard("student"),
+  roleGuard("student", "candidate"),
   registerController
 );
 
-// Student marks attendance (QR / OTP / AUTO)
+// Student/Candidate marks attendance (QR / OTP / AUTO)
 router.post(
   "/mark",
   authMiddleware,
-  roleGuard("student"),
+  roleGuard("student", "candidate"),
   markAttendanceController
 );
 
@@ -40,6 +42,22 @@ router.post(
   authMiddleware,
   roleGuard("organizer", "admin"),
   certificateEvaluationController
+);
+
+// Student/Candidate submits participation details
+router.post(
+  "/participation/submit",
+  authMiddleware,
+  roleGuard("student", "candidate"),
+  submitParticipationController
+);
+
+// Student/Candidate marks attendance via QR code
+router.post(
+  "/qr/verify",
+  authMiddleware,
+  roleGuard("student", "candidate"),
+  verifyQRCodeController
 );
 
 export default router;

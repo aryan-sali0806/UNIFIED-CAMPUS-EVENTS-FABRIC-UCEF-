@@ -161,4 +161,47 @@ export const registerForEvent = async (eventId, userId) => {
   
     return true;
   };
+
+  export const submitParticipation = async (eventId, userId, participationDetails) => {
+    const event = await Event.findById(eventId);
+    if (!event) throw new Error("Event not found");
+  
+    const log = await AttendanceLog.findOne({ event: eventId, user: userId });
+    if (!log) throw new Error("User is not registered for this event");
+  
+    log.participationDetails = {
+      ...log.participationDetails,
+      ...participationDetails,
+    };
+  
+    await log.save();
+    return log;
+  };
+
+  export const verifyQRCodeAttendance = async (eventId, userId, attendanceToken) => {
+    const event = await Event.findById(eventId);
+    if (!event) throw new Error("Event not found");
+
+    if (event.attendanceMethod !== "QR") {
+      throw new Error("This event does not use QR code attendance");
+    }
+
+    if (event.attendanceToken !== attendanceToken) {
+      throw new Error("Invalid QR code token");
+    }
+
+    if (event.eventState !== "LIVE") {
+      throw new Error("Attendance can only be marked for LIVE events");
+    }
+
+    const log = await AttendanceLog.findOne({ event: eventId, user: userId });
+    if (!log) throw new Error("User is not registered for this event");
+
+    // Mark attendance as present via QR code
+    log.attendanceStatus = "PRESENT";
+    log.attendancePercentage = 100;
+
+    await log.save();
+    return log;
+  };
   

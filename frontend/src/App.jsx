@@ -4,6 +4,7 @@ import Signup from "./pages/Signup";
 import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import Hackathons from "./pages/Hackathons";
+import Seminars from "./pages/Seminars";
 import Quizzes from "./pages/Quizzes";
 import Workshops from "./pages/Workshops";
 import Cultural from "./pages/Cultural";
@@ -19,18 +20,12 @@ import Customization from "./organizer/pages/Customization";
 
 
 function App() {
-  
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    navigate("/login");
-  };
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/hackathons" element={<Hackathons />} />
+        <Route path="/seminars" element={<Seminars />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/workshops" element={<Workshops />} />
         <Route path="/cultural" element={<Cultural />} />
@@ -47,8 +42,6 @@ function App() {
            <Route path="customize" element={<Customization />} />
           </Route>
         </Route>
-
-        
       </Routes>
     </BrowserRouter>
   );
